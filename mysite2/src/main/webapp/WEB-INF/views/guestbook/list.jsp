@@ -33,8 +33,9 @@
 					</table>
 				</form>
 				<ul>
+					<% for(GuestbookVo vo : list) {  %>
 					<li>
-						<% for(GuestbookVo vo : list) {  %>
+						
 						<table>
 							<tr>
 								<td>[<%=vo.getNo() %>]</td>
@@ -49,8 +50,9 @@
 							</tr>
 						</table>
 						<br>
-						<% } %>
+						
 					</li>
+					<% } %>
 				</ul>
 			</div>
 		</div>
