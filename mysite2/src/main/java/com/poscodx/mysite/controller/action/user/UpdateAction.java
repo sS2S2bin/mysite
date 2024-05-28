@@ -30,25 +30,20 @@ public class UpdateAction implements Action {
 			return;
 		}
 		
-		//action
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
 		String gender = request.getParameter("gender");
 		
 		UserVo vo = new UserVo();
+		vo.setNo(authUser.getNo());
 		vo.setName(name);
-		if(password!=null) {
-			vo.setPassword(password);	
-		}
+		vo.setPassword(password);
 		vo.setGender(gender);
 		
-	    int success = new UserDao().updateByNo(authUser.getNo(), vo);
-		
-		//request.getRequestDispatcher("/WEB-INF/views/user/updateform.jsp")
-		//.forward(request, response);
-		
-		response.sendRedirect(request.getContextPath());
-		return;
+		new UserDao().update(vo);
+		authUser.setName(name);
+		response.sendRedirect(request.getContextPath() + "/user?a=updateform&result=success");
+	
 	}
 
 }

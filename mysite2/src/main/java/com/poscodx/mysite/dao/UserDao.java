@@ -43,7 +43,8 @@ public class UserDao {
 		
 	}
 
-	public void insert(UserVo vo) {
+	public int insert(UserVo vo) {
+		int result = 0;
 		try(
 				Connection conn = getConnection(); 
 				PreparedStatement pstmt1 = conn.prepareStatement("insert into user values(null,?,?,password(?),?,current_date())");  
@@ -54,7 +55,7 @@ public class UserDao {
 				pstmt1.setString(2, vo.getEmail());
 				pstmt1.setString(3, vo.getPassword());
 				pstmt1.setString(4, vo.getGender());
-				pstmt1.executeUpdate();
+				result = pstmt1.executeUpdate();
 				
 				
 				ResultSet rs = pstmt2.executeQuery();
@@ -65,7 +66,7 @@ public class UserDao {
 				System.out.println("error : " + e);
 			}
 
-		
+		return result;
 	}
 	
 	public List<UserVo> findAll(){
@@ -168,40 +169,30 @@ public class UserDao {
 
 
 
-	public int updateByNo(Long no, UserVo vo) {
+	public int update(UserVo vo) {
 		int result = 0;
 		
-		try(
-				Connection conn = getConnection(); 
-			){
-				String sql = null;
-				if(vo.getPassword()==null) {
-					sql =  "update user set name=? , gender=? where no=?";
+		try (
+				Connection conn = getConnection();
+				PreparedStatement pstmt1 = conn.prepareStatement("update user set name=?, gender=? where no=?");
+				PreparedStatement pstmt2 = conn.prepareStatement("update user set name=?, password=password(?), gender=? where no=?");
+			) {
+				if("".equals(vo.getPassword())) {
+					pstmt1.setString(1, vo.getName());
+					pstmt1.setString(2, vo.getGender());
+					pstmt1.setLong(3, vo.getNo());
+					result = pstmt1.executeUpdate();
+				} else {
+					pstmt2.setString(1, vo.getName());
+					pstmt2.setString(2, vo.getPassword());
+					pstmt2.setString(3, vo.getGender());
+					pstmt2.setLong(4, vo.getNo());
+					result = pstmt2.executeUpdate();
 				}
-				else {
-					
-					sql = "update user set name=? , gender=?, password=password(?) where no=?";
-					
-				}
-				PreparedStatement pstmt = conn.prepareStatement(sql);  
-				pstmt.setString(1, vo.getName());
-				pstmt.setString(2, vo.getGender());
-				if(vo.getPassword()==null) {
-					pstmt.setLong(3, no);
-				}else {
-					pstmt.setString(3, vo.getPassword());
-					pstmt.setLong(4, no);	
-				}
-				
-				result = pstmt.executeUpdate();
-				
-				System.out.println("success? "+result);
-				
-				pstmt.close();
 			} catch (SQLException e) {
-				System.out.println("error : "+e);
+				System.out.println("Error:" + e);
 			}
-
-		return result;
-	}
+			
+			return result;				
+		}
 }
