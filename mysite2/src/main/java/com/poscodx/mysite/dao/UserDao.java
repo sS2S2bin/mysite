@@ -105,4 +105,103 @@ public class UserDao {
 		
 		return result;
 	}
+
+
+
+	public UserVo findByNoAndPassword(String email, String password) {
+		UserVo result = null;
+		
+		try(
+				Connection conn = getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement("select no,name from user where email=? and password=password(?)");  
+			){
+				pstmt.setString(1, email);
+				pstmt.setString(2, password);
+				ResultSet rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					Long no = rs.getLong(1);
+					String name = rs.getString(2);
+					result = new UserVo();
+					result.setName(name);
+					result.setNo(no);
+				}
+				rs.close();
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+		return result;
+	}
+
+
+
+	public UserVo findByNo(Long userNo) {
+		UserVo result = null;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select no, name, email, gender from user where no = ?");
+		) {
+				
+			pstmt.setLong(1, userNo);
+
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				Long no = rs.getLong(1);
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				String gender = rs.getString(4);
+				
+				result = new UserVo();
+				result.setNo(no);
+				result.setName(name);
+				result.setEmail(email);
+				result.setGender(gender);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("Error:" + e);
+		}		
+		
+		return result;
+	}
+
+
+
+	public int updateByNo(Long no, UserVo vo) {
+		int result = 0;
+		
+		try(
+				Connection conn = getConnection(); 
+			){
+				String sql = null;
+				if(vo.getPassword()==null) {
+					sql =  "update user set name=? , gender=? where no=?";
+				}
+				else {
+					
+					sql = "update user set name=? , gender=?, password=password(?) where no=?";
+					
+				}
+				PreparedStatement pstmt = conn.prepareStatement(sql);  
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getGender());
+				if(vo.getPassword()==null) {
+					pstmt.setLong(3, no);
+				}else {
+					pstmt.setString(3, vo.getPassword());
+					pstmt.setLong(4, no);	
+				}
+				
+				result = pstmt.executeUpdate();
+				
+				System.out.println("success? "+result);
+				
+				pstmt.close();
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+
+		return result;
+	}
 }

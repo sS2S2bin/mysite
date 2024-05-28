@@ -15,20 +15,20 @@ public abstract class ActionServlet extends HttpServlet {
 
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String actionName = Optional.ofNullable(request.getParameter("a")).orElse("");
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("utf-8");
+		String actionName = Optional.ofNullable(req.getParameter("a")).orElse("");
 		// Optional.ofnullable로 널인지 확인하고 null 이라면 orElse에 적힌 값으로 셋팅한다.
 		
 		
 		// 값으로 다룰때는 위처럼 사용할 수 있지만, action이 되어야하는 지금은 안돼 
 		Action action = getAction(actionName);
 		if (action == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return; //request날려도자바 코드는 계솔 실행되기 때문에
 		}
 		
-		action.execute(request,response);
+		action.execute(req,resp);
 	}
 
 
