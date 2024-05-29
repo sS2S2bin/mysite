@@ -34,16 +34,21 @@
 						<tr>
 							<td class="label">내용</td>
 						<td>
-							<div class="view-content">
-								${board.content}
-							</div>
+							<div class="view-content">${board.content}</div>
 						</td>
 						</tr>
 
 				</table>
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board">글목록</a>
-					<a href="">글수정</a>
+					<c:choose >
+						<c:when test="${empty authUser }">
+							<a>글수정을 원하신다면 로그인 해주세요.</a>
+						</c:when>
+						<c:otherwise >
+							<a href="${pageContext.request.contextPath }/board?a=modifyform&bno=${board.no}&bywho=${authUser.no}">글수정</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
@@ -52,3 +57,7 @@
 	</div>
 </body>
 </html>
+
+<c:if test='${param.modifyaccess == "fail" }'>
+	<script>alert("수정 권한이 없습니다. 다시 로그인 해주세요.")</script>
+</c:if>

@@ -123,6 +123,10 @@ a#new-book	 {
 	margin-left: 10px;
 	padding:10px 20px 11px 20px 
 }
+.board-form .bottom div {
+	margin-left: 10px;
+	padding:10px 20px 11px 20px 
+}
 
 a.del	{
 	display:block;

@@ -6,6 +6,7 @@ import com.poscodx.mysite.controller.ActionServlet.Action;
 import com.poscodx.mysite.controller.action.board.BoardMainAction;
 import com.poscodx.mysite.controller.action.board.boarddeleteAction;
 import com.poscodx.mysite.controller.action.board.modifyAction;
+import com.poscodx.mysite.controller.action.board.modifyformAction;
 import com.poscodx.mysite.controller.action.board.viewAction;
 import com.poscodx.mysite.controller.action.board.writeAction;
 import com.poscodx.mysite.controller.action.board.writeformAction;
@@ -21,9 +22,10 @@ public class BoardServlet extends ActionServlet {
 	private Map<String, Action> mapAction = Map.of(
 			"writeform", new writeformAction(),
 			"view", new viewAction(),
-			"modify", new modifyAction(),
+			"modifyform", new modifyformAction(),
 			"write", new writeAction(),
-			"delete", new boarddeleteAction()
+			"delete", new boarddeleteAction(),
+			"modify", new modifyAction()
 			);
 	
 	

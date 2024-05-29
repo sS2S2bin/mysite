@@ -31,6 +31,7 @@
 					<c:set var="count" value="${fn:length(boardlist)}" />
 					<c:forEach items='${boardlist }' var='vo' varStatus='status'>
 						<tr>
+							
 							<td>${count-status.index}</td>
 							<td style="text-align:left; padding-left:${20*vo.depth }px">
 								<a href="${pageContext.request.contextPath}/board?a=view&bno=${vo.no}">${vo.title }</a>
@@ -39,7 +40,7 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							
-
+							<!-- 로그인 구분 : 삭제 버튼 -->
 							<td>
  								<c:choose>
 									<c:when test='${empty authUser }'>
@@ -51,7 +52,8 @@
 										<a href="${pageContext.request.contextPath}/board?a=delete&bno=${vo.no}&bywho=${authUser.no}" class="del">삭제</a>
 									</c:otherwise>
 								</c:choose>
-							</td><!-- td는 비우지말고 td안에 들어가는걸 비워 -->
+							</td>
+							
 						</tr>
 					
 					</c:forEach>			
@@ -91,3 +93,4 @@
 <c:if test='${param.deleteresult == "success" }'>
 	<script>alert("성공적으로 삭제되었습니다.")</script>
 </c:if>
+

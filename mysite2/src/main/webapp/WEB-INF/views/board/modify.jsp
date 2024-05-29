@@ -14,24 +14,34 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath }/board">
+				<input type='hidden' name='a' value="modify">
+				<input type='hidden' name='bno' value="${board.no }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>
 						</tr>
 						<tr>
+							<td class="label">작성자</td>
+							<td>${board.writer }</td>
+						</tr>
+						<tr>
+							<td class="label">날짜</td>
+							<td>${board.regDate }</td>
+						</tr>
+						<tr>
 							<td class="label">제목</td>
-							<td><input type="text" name="title" value=""></td>
+							<td><input type="text" name="title" value="${board.title }"></td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content">vo.contents</textarea>
+								<textarea id="content" name="content">${board.content}</textarea>
 							</td>
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="">취소</a>
+						<a href="${pageContext.request.contextPath }/board?a=modifyform&bno=${board.no }&bywho=${authUser.no}">취소</a>
 						<input type="submit" value="수정">
 					</div>
 				</form>				

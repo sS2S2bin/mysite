@@ -62,7 +62,7 @@ public class BoardDao {
 		
 	}
 	public BoardVo findbyNo(Long searchno){
-		BoardVo vo = new BoardVo();
+		BoardVo vo = null;
 		
 		try(
 				Connection conn = getConnection(); 
@@ -80,6 +80,60 @@ public class BoardDao {
 				ResultSet rs = pstmt.executeQuery();
 				
 				while(rs.next()) {
+					vo = new BoardVo();
+					Long no = rs.getLong(1);
+					String title = rs.getString(2);
+					String contents = rs.getString(3);
+					Long hit = rs.getLong(4);
+					String regDate = rs.getString(5);
+					Long groupNo = rs.getLong(6);
+					Long orderNo = rs.getLong(7);
+					Long depth = rs.getLong(8);
+					Long userNo = rs.getLong(9);
+					String writer = rs.getString(10);
+					
+					vo.setNo(no);
+					vo.setTitle(title);
+					vo.setContent(contents);
+					vo.setHit(hit);
+					vo.setRegDate(regDate);
+					vo.setGroupNo(groupNo);
+					vo.setOrderNo(orderNo);
+					vo.setDepth(depth);
+					vo.setUserNo(userNo);
+					vo.setWriter(writer);
+					
+				}
+				
+				rs.close();
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+		
+		return vo;
+	}
+	
+	public BoardVo findbyNo(Long searchno, Long authNo){
+		BoardVo vo = null;
+		
+		try(
+				Connection conn = getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(
+						"select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name "
+						+ " from board b, user u "
+						+ " where u.no = b.user_no "
+						+ " and b.no = ? "
+						+ " and b.user_no =? "
+						+ " order by g_no desc, o_no asc");  
+					
+			
+			){
+				pstmt.setLong(1, searchno);
+				pstmt.setLong(2, authNo);
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
 					
 					Long no = rs.getLong(1);
 					String title = rs.getString(2);
@@ -91,6 +145,8 @@ public class BoardDao {
 					Long depth = rs.getLong(8);
 					Long userNo = rs.getLong(9);
 					String writer = rs.getString(10);
+					
+					vo = new BoardVo();
 					
 					vo.setNo(no);
 					vo.setTitle(title);
@@ -196,5 +252,28 @@ public class BoardDao {
 				System.out.println("error : "+e);
 			}
 		return result;
+	}
+
+
+	public int update(BoardVo board) {
+		int result = 0;
+		
+		try(
+				Connection conn = getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(
+						"update board set title=? , contents=? where no=?"
+						);
+			){
+				pstmt.setString(1, board.getTitle());
+				pstmt.setString(2, board.getContent());
+				pstmt.setLong(3, board.getNo());
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+		
+		return result;
+		
 	}
 }
