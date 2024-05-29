@@ -27,22 +27,6 @@ public class BoardDao {
 	}
 	
 
-
-	public void deleteByNo(Long no, String pw) {
-		try(
-			Connection conn = getConnection(); 
-			PreparedStatement pstmt = conn.prepareStatement("delete from board where no=? and password=?");  
-		){
-			pstmt.setLong(1, no);
-			pstmt.setString(2, pw);
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("error : "+e);
-		}
-		
-	}
-
 	public void insert(BoardVo vo) {
 		try(
 				Connection conn = getConnection(); 
@@ -180,6 +164,37 @@ public class BoardDao {
 			}
 
 		
+		return result;
+	}
+
+
+	public void deleteByNo(Long no, String pw) {
+		try(
+			Connection conn = getConnection(); 
+			PreparedStatement pstmt = conn.prepareStatement("delete from board where no=? and password=?");  
+		){
+			pstmt.setLong(1, no);
+			pstmt.setString(2, pw);
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("error : "+e);
+		}
+		
+	}
+	public int deleteByNo(long boardNo, long authNo) {
+		int result = 0;
+		try(
+				Connection conn = getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement("delete from board where no=? and user_no=?");  
+			){
+				pstmt.setLong(1, boardNo);
+				pstmt.setLong(2, authNo);
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
 		return result;
 	}
 }

@@ -48,7 +48,7 @@
 										</div>	
 									</c:when>
 									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/board?bno=${vo.no }&whoisit=${authUser.no}" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board?a=delete&bno=${vo.no}&bywho=${authUser.no}" class="del">삭제</a>
 									</c:otherwise>
 								</c:choose>
 							</td><!-- td는 비우지말고 td안에 들어가는걸 비워 -->
@@ -87,3 +87,7 @@
 	</div>
 </body>
 </html>
+
+<c:if test='${param.deleteresult == "success" }'>
+	<script>alert("성공적으로 삭제되었습니다.")</script>
+</c:if>

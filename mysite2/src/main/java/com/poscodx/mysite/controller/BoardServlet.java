@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
 import com.poscodx.mysite.controller.action.board.BoardMainAction;
+import com.poscodx.mysite.controller.action.board.boarddeleteAction;
 import com.poscodx.mysite.controller.action.board.modifyAction;
 import com.poscodx.mysite.controller.action.board.viewAction;
 import com.poscodx.mysite.controller.action.board.writeAction;
@@ -21,7 +22,8 @@ public class BoardServlet extends ActionServlet {
 			"writeform", new writeformAction(),
 			"view", new viewAction(),
 			"modify", new modifyAction(),
-			"write", new writeAction()
+			"write", new writeAction(),
+			"delete", new boarddeleteAction()
 			);
 	
 	

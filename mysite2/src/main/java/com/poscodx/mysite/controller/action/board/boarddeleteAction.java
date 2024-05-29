@@ -8,17 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
 import com.poscodx.mysite.dao.BoardDao;
-import com.poscodx.mysite.vo.BoardVo;
 
-public class viewAction implements Action {
+public class boarddeleteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String no = request.getParameter("bno");
-		BoardVo boardvo = new BoardDao().findbyNo(Long.parseLong(no));
+		String boardNo = request.getParameter("bno");
+		String authNo = request.getParameter("bywho");
+
+		String result = "fail";
+		result = 1 == ( new BoardDao().deleteByNo(Long.parseLong(boardNo), Long.parseLong(authNo)) ) ? "success" : "fail";
 		
-		request.setAttribute("board", boardvo);
-		request.getRequestDispatcher("/WEB-INF/views/board/view.jsp").forward(request, response);
+		
+		response.sendRedirect(request.getContextPath()+"/board?deleteresult="+result);
 
 	}
 
