@@ -60,7 +60,7 @@ public class BoardDao {
 				pstmt1.setString(2, vo.getContent());
 				pstmt1.setLong(3, 0);
 				
-				pstmt1.setLong(4, maxGroupNo);
+				pstmt1.setLong(4, maxGroupNo+1);
 				pstmt1.setLong(5, 1);
 				pstmt1.setLong(6, 0);
 				pstmt1.setLong(7, vo.getUserNo());
