@@ -25,8 +25,8 @@ public class LoginAction implements Action {
 			request
 			.getRequestDispatcher("/WEB-INF/views/user/loginform.jsp")
 			.forward(request, response);
+			return; //이거 빼면 실행
 		}
-		
 		// authUser가 Null이 아니라는 이야기
 		// login 처리
 		HttpSession session = request.getSession(true);

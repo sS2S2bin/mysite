@@ -20,8 +20,8 @@ public class GuestbookMainAction implements Action {
 		
 		request
 		.getRequestDispatcher("/WEB-INF/views/guestbook/list.jsp")
-		.forward(request, response);
-
+		.forward(request, response);	
+		
 	}
 
 }
