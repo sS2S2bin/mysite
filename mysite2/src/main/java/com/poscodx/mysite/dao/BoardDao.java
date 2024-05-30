@@ -175,7 +175,7 @@ public class BoardDao {
 		try(
 				Connection conn = getConnection(); 
 				PreparedStatement pstmt = conn.prepareStatement(
-						"select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name "
+						"select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name,u.no as userNo "
 						+ "from board b, user u "
 						+ "where u.no = b.user_no "
 						+ "order by g_no desc, o_no asc");  
@@ -197,7 +197,9 @@ public class BoardDao {
 					Long orderNo = rs.getLong(7);
 					Long depth = rs.getLong(8);
 					Long userNo = rs.getLong(9);
+					
 					String writer = rs.getString(10);
+					Long writerNo = rs.getLong(11);
 					
 					vo.setNo(no);
 					vo.setTitle(title);
@@ -209,6 +211,7 @@ public class BoardDao {
 					vo.setDepth(depth);
 					vo.setUserNo(userNo);
 					vo.setWriter(writer);
+					vo.setWriterNo(writerNo);
 					
 					
 					result.add(vo);

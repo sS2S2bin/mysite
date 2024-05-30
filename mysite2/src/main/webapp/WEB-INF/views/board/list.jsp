@@ -48,8 +48,11 @@
 											<p>삭제를 원하시면 로그인해 주세요.</p>
 										</div>	
 									</c:when>
-									<c:otherwise>
+									<c:when test='${authUser.no==vo.writerNo }'>
 										<a href="${pageContext.request.contextPath}/board?a=delete&bno=${vo.no}&bywho=${authUser.no}" class="del">삭제</a>
+									</c:when>
+									<c:otherwise>
+										<p></p>
 									</c:otherwise>
 								</c:choose>
 							</td>

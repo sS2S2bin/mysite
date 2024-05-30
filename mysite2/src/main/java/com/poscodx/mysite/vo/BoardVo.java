@@ -10,8 +10,16 @@ public class BoardVo {
 	private Long groupNo;
 	private Long orderNo;
 	private Long depth;
-	private String writer;
 	
+	private String writer;
+	private Long writerNo;
+	
+	public Long getWriterNo() {
+		return writerNo;
+	}
+	public void setWriterNo(Long writerNo) {
+		this.writerNo = writerNo;
+	}
 	public String getWriter() {
 		return writer;
 	}
