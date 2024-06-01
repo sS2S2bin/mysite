@@ -34,6 +34,9 @@
 							
 							<td>${count-status.index}</td>
 							<td style="text-align:left; padding-left:${20*vo.depth }px">
+							<c:if test="${vo.depth>0 }">
+								<img src="${pageContext.request.contextPath}/statics/images/reply.png">
+							</c:if>
 								<a href="${pageContext.request.contextPath}/board?a=view&bno=${vo.no}">${vo.title }</a>
 							</td>
 							<td>${vo.writer }</td>
@@ -63,25 +66,29 @@
 				</table>
 				
 				<!-- pager 추가 -->
+				<%-- <c:set var="totalPage" value="${fn:length(boardlist) }" />
+				<c:forEach var="page" begin="${ }" end="${+5 }" step="1">
+				
+				</c:forEach>
 				<div class="pager">
 					<ul>
 						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
+						<li class="selected"><a href="${pageContext.request.contextPath }/board?p=${}">${ }</a></li>
+						<li>2</li>
 						<li><a href="">3</a></li>
 						<li>4</li>
 						<li>5</li>
 						<li><a href="">▶</a></li>
 					</ul>
-				</div>					
+				</div>			 --%>		
 				<!-- pager 추가 -->
 				<div class="bottom">
 				<c:choose>
 					<c:when test='${empty authUser }'>
-						<p >글쓰기</p>
+						<p >글쓰기를 원하신다면 로그인 하세요.</p>
 					</c:when>
 					<c:otherwise>
-						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE" id="new-book">글쓰기</a>
 					</c:otherwise>
 				</c:choose>
 				</div>	

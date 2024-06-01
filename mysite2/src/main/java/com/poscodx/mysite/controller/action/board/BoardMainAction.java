@@ -16,6 +16,8 @@ public class BoardMainAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//String p = request.getAttribute("p");
+		
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		list = new BoardDao().findAll();
 		

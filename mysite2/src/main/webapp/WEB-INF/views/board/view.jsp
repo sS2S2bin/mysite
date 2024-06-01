@@ -46,6 +46,7 @@
 							<a>글수정을 원하신다면 로그인 해주세요.</a>
 						</c:when>
 						<c:otherwise >
+							<a href="${pageContext.request.contextPath }/board?a=writeform&bno=${board.no}&reply=TRUE">답글 달기</a>
 							<a href="${pageContext.request.contextPath }/board?a=modifyform&bno=${board.no}&bywho=${authUser.no}">글수정</a>
 						</c:otherwise>
 					</c:choose>

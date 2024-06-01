@@ -279,4 +279,69 @@ public class BoardDao {
 		return result;
 		
 	}
+
+
+	public int reply(long bNo, BoardVo vo) {
+		int result = 0;
+		
+		try(
+				Connection conn = getConnection(); 
+				// g_no, o_no, depth 알아오기
+				PreparedStatement pstmt0 = conn.prepareStatement("select g_no, o_no, depth from board where no=?");
+				
+				// update하기
+				PreparedStatement pstmt1 = conn.prepareStatement("update board set o_no=o_no+1 where g_no=? and o_no>=?");
+				
+				// insert하기
+				PreparedStatement pstmt2 = conn.prepareStatement("insert into board"
+						+ "  values(null,?,?,?, now(), ?,?,?,?)");  
+				
+				// 확인
+				PreparedStatement pstmt3 = conn.prepareStatement("select last_insert_id() from board");  
+			){
+				// g_no, o_no, depth 알아오
+				pstmt0.setLong(1,bNo);
+				ResultSet rs0 = pstmt0.executeQuery();
+				Long oNo = null;
+				Long depth = null;
+				Long gNo = null;
+				if(rs0.next()) {
+					gNo = rs0.getLong(1);
+					oNo = rs0.getLong(2)+1;
+					depth = rs0.getLong(3)+1;
+				}
+				rs0.close();
+				
+				// update
+				pstmt1.setLong(1, gNo);
+				pstmt1.setLong(2,oNo);
+				// pstmt1.setLong(3, depth);
+				int updateResult = pstmt1.executeUpdate();
+				System.out.println("reply update result:"+updateResult);
+				
+				
+				// insert
+				pstmt2.setString(1, vo.getTitle());
+				pstmt2.setString(2, vo.getContent());
+				pstmt2.setLong(3, 0); //hit
+				
+				pstmt2.setLong(4, gNo);
+				pstmt2.setLong(5, oNo);
+				pstmt2.setLong(6, depth);
+				pstmt2.setLong(7, vo.getUserNo());
+				pstmt2.executeUpdate();
+			
+				// vo no 넘겨주기 
+				ResultSet rs3 = pstmt3.executeQuery();
+				vo.setNo(rs3.next() ? rs3.getLong(1):null);
+				rs3.close();
+				
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+		
+		return result;
+		
+		
+	}
 }
