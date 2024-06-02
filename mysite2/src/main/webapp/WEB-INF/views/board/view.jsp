@@ -41,13 +41,19 @@
 					<a href="${pageContext.request.contextPath }/board">글목록</a>
 					<c:choose >
 						<c:when test="${empty authUser }">
-							<a>글수정을 원하신다면 로그인 해주세요.</a>
+							<a style="text-align:right;">글수정을 원하신다면 로그인 해주세요.</a>
 						</c:when>
 						<c:otherwise >
-							<a href="${pageContext.request.contextPath }/board?a=writeform&bno=${board.no}&reply=TRUE">답글 달기</a>
-							<a href="${pageContext.request.contextPath }/board?a=modifyform&bno=${board.no}&bywho=${authUser.no}">글수정</a>
+							<c:if test="${authUser.no==board.userNo }">
+								<a href="${pageContext.request.contextPath }/board?a=modifyform&bno=${board.no}&bywho=${authUser.no}">글수정</a>
+							</c:if>
 						</c:otherwise>
 					</c:choose>
+				</div>
+				<div class="bottom">	
+				<c:if test="${not empty authUser }">
+					<a href="${pageContext.request.contextPath }/board?a=writeform&bno=${board.no}&reply=TRUE">답글 달기</a>			
+				</c:if>
 				</div>
 			</div>
 		</div>
