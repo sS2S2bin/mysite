@@ -20,16 +20,18 @@
 					<c:choose>
 						<c:when test="${param.reply == 'FALSE' }">
 							<input type = "hidden" name = "a" value="write">
+							<c:set var="writeORreply" value="글쓰기"></c:set>
 						</c:when>
 						<c:otherwise>
 							<input type = "hidden" name = "a" value="reply">
 							<input type = "hidden" name = "bno" value="${param.bno }">
+							<c:set var="writeORreply" value="답글 달기"></c:set>
 						</c:otherwise>
 					</c:choose>
 					<input type = "hidden" name = "writer" value="${authUser.no }">					
 					<table class="tbl-ex">
 						<tr>
-							<th colspan="2">글쓰기</th>
+							<th colspan="2">${writeORreply}</th>
 						</tr>
 						<tr>
 							<td class="label">제목</td>
