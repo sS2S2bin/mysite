@@ -66,22 +66,44 @@
 				</table>
 				
 				<!-- pager 추가 -->
-				<%-- <c:set var="totalPage" value="${fn:length(boardlist) }" />
-				<c:forEach var="page" begin="${ }" end="${+5 }" step="1">
-				
-				</c:forEach>
+				 <c:set var="endPage" value="${start+4 }" />				
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<li class="selected"><a href="${pageContext.request.contextPath }/board?p=${}">${ }</a></li>
-						<li>2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+						<!-- 페이지 ◀ 이동 -->
+						<c:choose>
+							<c:when test="${start !=1 }">
+								<li><a href="${pageContext.request.contextPath }/board?p=${start-5}">◀</a></li>
+							</c:when>
+							<c:otherwise></c:otherwise>
+						</c:choose>
+						
+						<!-- 페이지 번호 -->
+						<c:forEach begin="${start}" end="${start+4 }" step="1" var="page">
+							<c:choose >
+								<c:when test="${p==page }">
+									<li class="selected"><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>
+								</c:when>
+								<c:when test="${total< page }">
+									<li class="disable"><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class=""><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>									
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						
+						<!-- 페이지 ▶ 이동 -->
+						<c:choose>
+							<c:when test="${total <= endPage }">
+							</c:when>
+							<c:otherwise>
+								<li><a href="${pageContext.request.contextPath }/board?p=${start+5}">▶</a></li>							
+							</c:otherwise>
+						</c:choose>
 					</ul>
-				</div>			 --%>		
+				</div>		
 				<!-- pager 추가 -->
+				
 				<div class="bottom">
 				<c:choose>
 					<c:when test='${empty authUser }'>

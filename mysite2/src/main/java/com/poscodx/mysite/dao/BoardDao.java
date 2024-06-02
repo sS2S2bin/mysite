@@ -299,7 +299,7 @@ public class BoardDao {
 				// 확인
 				PreparedStatement pstmt3 = conn.prepareStatement("select last_insert_id() from board");  
 			){
-				// g_no, o_no, depth 알아오
+				// g_no, o_no, depth
 				pstmt0.setLong(1,bNo);
 				ResultSet rs0 = pstmt0.executeQuery();
 				Long oNo = null;
@@ -315,9 +315,7 @@ public class BoardDao {
 				// update
 				pstmt1.setLong(1, gNo);
 				pstmt1.setLong(2,oNo);
-				// pstmt1.setLong(3, depth);
-				int updateResult = pstmt1.executeUpdate();
-				System.out.println("reply update result:"+updateResult);
+				pstmt1.executeUpdate();
 				
 				
 				// insert
@@ -343,5 +341,82 @@ public class BoardDao {
 		return result;
 		
 		
+	}
+
+	public Integer countAllboard() {
+		Long result = null;
+		try(
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("select count(no) from board");
+			
+			){
+			ResultSet rs = pstmt.executeQuery();
+			result = rs.next() ? rs.getLong(1):null;
+			rs.close();
+			
+		}catch (SQLException e) {
+			System.out.println("count all board method error : "+e);
+		}
+
+		return result.intValue();
+	}
+	public List<BoardVo> findbyPage(long currentPage) {
+		List<BoardVo> result = new ArrayList<>();
+		currentPage--;
+		System.out.println(currentPage);
+		try(
+				Connection conn = getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(
+						"select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name,u.no as userNo "
+						+ "from board b, user u "
+						+ "where u.no = b.user_no "
+						+ "order by g_no desc, o_no asc "
+						+ "limit ?,5");  
+					
+			
+			){
+			
+				pstmt.setLong(1, currentPage*5);
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					BoardVo vo = new BoardVo();
+					
+					Long no = rs.getLong(1);
+					String title = rs.getString(2);
+					String contents = rs.getString(3);
+					Long hit = rs.getLong(4);
+					String regDate = rs.getString(5);
+					Long groupNo = rs.getLong(6);
+					Long orderNo = rs.getLong(7);
+					Long depth = rs.getLong(8);
+					Long userNo = rs.getLong(9);
+					
+					String writer = rs.getString(10);
+					Long writerNo = rs.getLong(11);
+					
+					vo.setNo(no);
+					vo.setTitle(title);
+					vo.setContent(contents);
+					vo.setHit(hit);
+					vo.setRegDate(regDate);
+					vo.setGroupNo(groupNo);
+					vo.setOrderNo(orderNo);
+					vo.setDepth(depth);
+					vo.setUserNo(userNo);
+					vo.setWriter(writer);
+					vo.setWriterNo(writerNo);
+					
+					
+					result.add(vo);
+				}
+				
+				rs.close();
+			} catch (SQLException e) {
+				System.out.println("error : "+e);
+			}
+
+		
+		return result;
 	}
 }
