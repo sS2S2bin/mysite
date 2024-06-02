@@ -17,19 +17,17 @@
 			<div id="board" class="board-form">
 				<table class="tbl-ex">
 					<tr>
-						<th colspan="2">글보기</th>
+						<th colspan="3">글보기</th>
 					</tr>
 						<tr>
 							<td class="label">제목</td>
 							<td>${board.title }</td>
+							<td style="text-align:right;"> 조회수 ${board.hit }</td>
 						</tr>
 						<tr>
 							<td class="label">작성자</td>
 							<td>${board.writer }</td>
-						</tr>
-						<tr>
-							<td class="label">날짜</td>
-							<td>${board.regDate }</td>
+							<td style="text-align:right;"> 날짜 ${board.regDate }</td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>

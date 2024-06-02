@@ -107,7 +107,7 @@
 				<div class="bottom">
 				<c:choose>
 					<c:when test='${empty authUser }'>
-						<p >글쓰기를 원하신다면 로그인 하세요.</p>
+						<p style="text-align:right;">글쓰기를 원하신다면 로그인 하세요.</p>
 					</c:when>
 					<c:otherwise>
 						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE" id="new-book">글쓰기</a>

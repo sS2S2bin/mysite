@@ -66,6 +66,10 @@ public class BoardDao {
 		
 		try(
 				Connection conn = getConnection(); 
+				//hit 
+				PreparedStatement pstmt0 = conn.prepareStatement("update board set hit = hit+1 where no =? ");
+				
+				//view
 				PreparedStatement pstmt = conn.prepareStatement(
 						"select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name "
 						+ "from board b, user u "
@@ -75,10 +79,13 @@ public class BoardDao {
 					
 			
 			){
+				//hit
+				pstmt0.setLong(1, searchno);
+				pstmt0.executeUpdate();
+				
+				//view
 				pstmt.setLong(1, searchno);
-				
 				ResultSet rs = pstmt.executeQuery();
-				
 				while(rs.next()) {
 					vo = new BoardVo();
 					Long no = rs.getLong(1);
@@ -363,7 +370,7 @@ public class BoardDao {
 	public List<BoardVo> findbyPage(long currentPage) {
 		List<BoardVo> result = new ArrayList<>();
 		currentPage--;
-		System.out.println(currentPage);
+		
 		try(
 				Connection conn = getConnection(); 
 				PreparedStatement pstmt = conn.prepareStatement(
