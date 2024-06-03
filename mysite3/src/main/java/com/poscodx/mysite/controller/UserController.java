@@ -31,7 +31,7 @@ public class UserController {
 	
 	@RequestMapping(value="/joinsuccess", method=RequestMethod.GET)
 	public String joinsuccess() {
-		return "/user/joinsuccess";
+		return "user/joinsuccess";
 	}
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
@@ -70,7 +70,7 @@ public class UserController {
 		UserVo vo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo", vo);
 		
-		return "/user/update";
+		return "user/update";
 	}
 	
 	
