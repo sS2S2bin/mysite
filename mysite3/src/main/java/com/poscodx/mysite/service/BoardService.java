@@ -31,7 +31,8 @@ public class BoardService {
 		return vo;
 	}
 	
-	public BoardVo getContents(Long boardNo, Long userNo) { // 수정할 때 쓰라??
+	//로그인한 사용자들을 위해 글 수정하기를 가져올 때 필요함
+	public BoardVo getContents(Long boardNo, Long userNo) { 
 		
 	}
 	public void updateContents(BoardVo vo) {//글수정할떄 
