@@ -76,6 +76,12 @@ and g_no = 9
 and depth = 2
 ; 
 
+update board
+set hit = hit+1
+where no = 1
+; 
+select * from board
+where no = 1;
 
 select * from board
 order by g_no desc, o_no asc;
@@ -88,7 +94,9 @@ select b.no,title,contents,hit,b.reg_date,g_no,o_no,depth,user_no, u.name,u.no a
 from board b, user u
 where u.no = b.user_no
 order by g_no desc, o_no asc
-limit 15,5
+limit 0,5
 ;
 -- 0,5,10,15
 
+select * from user
+where name="qwer";

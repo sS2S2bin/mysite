@@ -37,7 +37,7 @@
 							<c:if test="${vo.depth>0 }">
 								<img src="${pageContext.request.contextPath}/statics/images/reply.png">
 							</c:if>
-								<a href="${pageContext.request.contextPath}/board?a=view&bno=${vo.no}">${vo.title }</a>
+								<a href="${pageContext.request.contextPath}/board/view/${vo.no}">${vo.title }</a>
 							</td>
 							<td>${vo.writer }</td>
 							<td>${vo.hit }</td>
@@ -52,7 +52,7 @@
 										</div>	
 									</c:when>
 									<c:when test='${authUser.no==vo.writerNo }'>
-										<a href="${pageContext.request.contextPath}/board?a=delete&bno=${vo.no}&bywho=${authUser.no}" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board/delete/${vo.no}/${authUser.no}" class="del">삭제</a>
 									</c:when>
 									<c:otherwise>
 										<p></p>
@@ -72,7 +72,7 @@
 						<!-- 페이지 ◀ 이동 -->
 						<c:choose>
 							<c:when test="${start !=1 }">
-								<li><a href="${pageContext.request.contextPath }/board?p=${start-5}">◀</a></li>
+								<li><a href="${pageContext.request.contextPath }/board/${start-5}">◀</a></li>
 							</c:when>
 							<c:otherwise></c:otherwise>
 						</c:choose>
@@ -81,13 +81,13 @@
 						<c:forEach begin="${start}" end="${start+4 }" step="1" var="page">
 							<c:choose >
 								<c:when test="${p==page }">
-									<li class="selected"><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>
+									<li class="selected"><a href="${pageContext.request.contextPath }/board/${page}">${page}</a></li>
 								</c:when>
 								<c:when test="${total< page }">
-									<li class="disable"><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>
+									<li class="disable"><a href="${pageContext.request.contextPath }/board/${page}">${page}</a></li>
 								</c:when>
 								<c:otherwise>
-									<li class=""><a href="${pageContext.request.contextPath }/board?p=${page}">${page}</a></li>									
+									<li class=""><a href="${pageContext.request.contextPath }/board/${page}">${page}</a></li>									
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -97,7 +97,7 @@
 							<c:when test="${total <= endPage }">
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.request.contextPath }/board?p=${start+5}">▶</a></li>							
+								<li><a href="${pageContext.request.contextPath }/board/${start+5}">▶</a></li>							
 							</c:otherwise>
 						</c:choose>
 					</ul>
@@ -110,7 +110,7 @@
 						<p style="text-align:right;">글쓰기를 원하신다면 로그인 하세요.</p>
 					</c:when>
 					<c:otherwise>
-						<a href="${pageContext.request.contextPath}/board?a=writeform&reply=FALSE" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/writeform/reply=FALSE" id="new-book">글쓰기</a>
 					</c:otherwise>
 				</c:choose>
 				</div>	

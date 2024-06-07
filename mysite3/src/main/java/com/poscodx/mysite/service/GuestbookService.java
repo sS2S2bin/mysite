@@ -18,7 +18,7 @@ public class GuestbookService {
 	}
 	
 	public void deleteContents(Long no, String password) {
-		guestbookRepository.deleteByNo(no, password);
+		guestbookRepository.deleteByNoAndPassword(no, password);
 	}
 	
 	public void addContents(GuestbookVo vo) {
