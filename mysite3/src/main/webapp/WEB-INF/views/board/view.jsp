@@ -45,14 +45,14 @@
 						</c:when>
 						<c:otherwise >
 							<c:if test="${authUser.no==board.userNo }">
-								<a href="${pageContext.request.contextPath }/board/modifyform/${board.no}/${authUser.no}">글수정</a>
+								<a href="${pageContext.request.contextPath }/board/modify/${board.no}/${authUser.no}">글수정</a>
 							</c:if>
 						</c:otherwise>
 					</c:choose>
 				</div>
 				<div class="bottom">	
 				<c:if test="${ not empty authUser }">
-					<a href="${pageContext.request.contextPath }/board/writeform/${board.no}/reply">답글 달기</a>			
+					<a href="${pageContext.request.contextPath }/board/write/${board.no}/reply">답글 달기</a>			
 				</c:if>
 				</div>
 			</div>

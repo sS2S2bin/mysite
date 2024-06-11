@@ -110,7 +110,7 @@
 						<p style="text-align:right;">글쓰기를 원하신다면 로그인 하세요.</p>
 					</c:when>
 					<c:otherwise>
-						<a href="${pageContext.request.contextPath}/board/writeform/reply=FALSE" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write" id="new-book">글쓰기</a>
 					</c:otherwise>
 				</c:choose>
 				</div>	

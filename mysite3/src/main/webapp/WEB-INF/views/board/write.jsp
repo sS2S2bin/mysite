@@ -24,7 +24,6 @@
 						</c:when>
 						<c:otherwise>
 							<input type = "hidden" name = "a" value="reply">
-							<input type = "hidden" name = "bno" value="${param.bno }">
 							<c:set var="writeORreply" value="답글 달기"></c:set>
 						</c:otherwise>
 					</c:choose>

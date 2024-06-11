@@ -20,11 +20,23 @@
 	]]>
 	</select>
 	
-	<select id="findByNo" resultType="boardvo">
+	<select id="findByNo" parameterType="long" resultType="boardvo">
 	<![CDATA[
 	select b.no as no, title, contents as content,hit,b.reg_date as regDate ,g_no as groupNo ,o_no as orderNo ,depth,user_no as userNo, u.name as wrtier,u.no as writerNo
 	from board b, user u 
 	where u.no = b.user_no 
+	and b.no = #{no}
+	order by g_no desc, o_no asc
+	]]>
+	</select>
+	
+	<select id="findByNoPassword" parameterType="map" resultType="boardvo">
+	<![CDATA[
+	select b.no as no, title, contents as content,hit,b.reg_date as regDate ,g_no as groupNo ,o_no as orderNo ,depth,user_no as userNo, u.name as wrtier,u.no as writerNo
+	from board b, user u 
+	where u.no = b.user_no 
+	and b.no = #{no}
+	and u.no = #{authNo}
 	order by g_no desc, o_no asc
 	]]>
 	</select>
@@ -35,13 +47,44 @@
 	]]>
 	</update>
 	
+	
+	<update id="update" parameterType="boardvo" >
+	<![CDATA[
+	update board set title=#{title} , contents=#{content} where no=#{no}
+	]]>
+	</update>
+	
+	<update id="updateOrderNo">
+	<![CDATA[
+	update board set o_no=o_no+1 where g_no=#{groupNo} and o_no>=#{orderNo}
+	]]>
+	</update>
+	
 	<insert id="insert" parameterType="boardvo">
 	<![CDATA[
-	insert into board values(null,#{title},#{content},0, now(), ?,1,0,userNo)
+	insert into board values(null,#{title},#{content},0, now(), #{groupNo},1,0,#{userNo})
 	]]>
 	</insert>
 	
+	<delete id="deleteByNo" parameterType="map">
+	delete from board where no=#{no}
+	<choose>
+		<when test='password == "" '>
+			 and user_no=#{userNo}
+		</when>
+		<otherwise>
+			and password=#{password}
+		</otherwise>
+	</choose>
+
+	</delete>
 	
+	
+	<insert id="reply" parameterType="boardvo">
+	<![CDATA[
+	insert into board values(null,#{title},#{content},0, now(), #{groupNo},#{orderNo},#{depth}, #{userNo})
+	]]>
+	</insert>
 		
 
 </mapper>
