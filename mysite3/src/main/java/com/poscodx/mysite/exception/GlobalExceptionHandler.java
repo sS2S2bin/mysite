@@ -3,24 +3,25 @@ package com.poscodx.mysite.exception;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	
+	private static final Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
+			
 	@ExceptionHandler(Exception.class)
-	public String handler(Exception e, Model model){
-		//1. 로깅(loggin)
-		StringWriter errors = new StringWriter(); 
+	public String handler(Exception e, Model model) {
+		//1. 로깅(logging)
+		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
-		//얘가 이걸 통해서 메모리에 뿌려줌
+		logger.error(errors.toString());
 		
-		System.out.println(errors.toString());
-		//2. 사과(종료)(
-		model.addAttribute("error",errors.toString());
+		//2. 사과(종료)
+		model.addAttribute("error", errors.toString());
 		return "errors/exception";
 	}
-
 }

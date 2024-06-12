@@ -11,7 +11,7 @@ import com.poscodx.mysite.security.Auth;
 import com.poscodx.mysite.vo.SiteVo;
 
 @Controller
-//@Auth(role="ADMIN")
+@Auth(role="ADMIN")
 @RequestMapping("/admin")
 public class AdminController {
 	
