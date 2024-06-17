@@ -16,7 +16,7 @@ public class UserService {
 	}
 	
 	public UserVo getUser(String email, String password){
-		return userRepository.findByNoAndPassword(email, password);
+		return userRepository.findByEmailAndPassword(email, password);
 	}
 
 	public UserVo getUser(Long no) {

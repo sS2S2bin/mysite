@@ -4,76 +4,94 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poscodx.mysite.repository.BoardRepository;
 import com.poscodx.mysite.vo.BoardVo;
 
 @Service
 public class BoardService {
+	private static final int LIST_SIZE = 5; //리스팅되는 게시물의 수
+	private static final int PAGE_SIZE = 5; //페이지 리스트의 페이지 수
+	
+	@Autowired
 	private BoardRepository boardRepository;
 	
-	public BoardService(BoardRepository boardRepository) {
-		this.boardRepository = boardRepository;
+	@Transactional
+	public void addContents(BoardVo boardVo) {
+		if(boardVo.getGroupNo() != null) {
+			boardRepository.updateOrderNo(boardVo.getGroupNo(), boardVo.getOrderNo());
+		}
+		
+		boardRepository.insert(boardVo);
 	}
 	
-	public void addContents(BoardVo vo) {
-//		if(vo.getGroupNo()!=null) {
-//			boardRepository.updateOrderNo(.);
-//			boardRepository.insert(vo);
-//		}
-	}
 	public BoardVo getContents(Long no) {
-		BoardVo vo = boardRepository.findByNo(no);
-		if(vo!=null) {
+		BoardVo boardVo = boardRepository.findByNo(no);
+		
+		if(boardVo != null) {
 			boardRepository.updateHit(no);
 		}
-		return vo;
+		
+		return boardVo;
+	}
+
+	public BoardVo getContents(Long no, Long userNo) {
+		BoardVo boardVo = boardRepository.findByNoAndUserNo(no, userNo);
+		return boardVo;
 	}
 	
-	//로그인한 사용자들을 위해 글 수정하기를 가져올 때 필요함
-	public BoardVo getContents(Long boardNo, Long userNo) { 
-		
-	}
-	public void updateContents(BoardVo vo) {//글수정할떄 
-		
+	public void modifyContents(BoardVo boardVo) {
+		boardRepository.update(boardVo);
 	}
 	
 	public void deleteContents(Long boardNo, Long userNo) {
-		
+		boardRepository.delete(boardNo, userNo);
 	}
 	
-	public Map<String, Object> getContentsList(int currentPage) { // , String keyword
-		List<BoardVo> list = null;
-		Map<String, Object> map = new HashMap<>();
+	public Map<String, Object> getContentsList(int currentPage, String keyword) {
 		
-		// 현재 페이지에 보여줄 게시글 리스트 
-		list = boardRepository.findbyPage(--currentPage);
+		//1. 페이징을 위한 기본 데이터 계산
+		int totalCount = boardRepository.getTotalCount(keyword); 
+		int pageCount = (int)Math.ceil((double)totalCount / LIST_SIZE);
+		int blockCount = (int)Math.ceil((double)pageCount / PAGE_SIZE);
+		int currentBlock = (int)Math.ceil((double)currentPage / PAGE_SIZE);
 		
-		// 페이지 시작 번호 계산 
-		int start = (int) (((currentPage-1)/5)*5+1);
+		//2. 파라미터 page 값  검증
+		if(currentPage > pageCount) {
+			currentPage = pageCount;
+			currentBlock = (int)Math.ceil((double)currentPage / PAGE_SIZE);
+		}		
 		
-		// 페이지 끝 번호 계산 (총 페이지 수)
-		int total = (int) ((boardRepository.countAllboard()-1)/5+1);
+		if(currentPage < 1) {
+			currentPage = 1;
+			currentBlock = 1;
+		}
 		
+		//3. view에서 페이지 리스트를 렌더링 하기위한 데이터 값 계산
+		int beginPage = currentBlock == 0 ? 1 : (currentBlock - 1) * PAGE_SIZE + 1;
+		int prevPage = (currentBlock > 1 ) ? (currentBlock - 1) * PAGE_SIZE : 0;
+		int nextPage = (currentBlock < blockCount) ? currentBlock * PAGE_SIZE + 1 : 0;
+		int endPage = (nextPage > 0) ? (beginPage - 1) + LIST_SIZE : pageCount;
+		
+		//4. 리스트 가져오기
+		List<BoardVo> list = boardRepository.findAllByPageAndKeword(keyword, currentPage, LIST_SIZE);
+		
+		//5. 리스트 정보를 맵에 저장
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("list", list);
-		map.put("p", currentPage);
-		map.put("start", start);
-		map.put("total", total);
-		map.put("boardlist", list);
-				
-//		map.put("keyword", 0);
-//		
-//		map.put("totalCount", 0);
-//		map.put("listSize", 0);
-//		map.put("currentPage", 0);
-//		map.put("beginPage", 0);
-//		map.put("endPage", 0);
-//		map.put("prev", 0);
-//		map.put("next", 0);
-		
+		map.put("totalCount", totalCount);
+		map.put("listSize", LIST_SIZE);
+		map.put("currentPage", currentPage);
+		map.put("beginPage", beginPage);
+		map.put("endPage", endPage);
+		map.put("prevPage", prevPage);
+		map.put("nextPage", nextPage);
+		map.put("keyword", keyword);
+
 		return map;
 	}
-	
 }

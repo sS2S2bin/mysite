@@ -3,88 +3,152 @@
 
 <mapper namespace="board">
 
-	<select id="findbyPage" parameterType="long" resultType="boardvo">	
-	<![CDATA[
-	select b.no as no, title, contents as content,hit,b.reg_date as regDate ,g_no as groupNo ,o_no as orderNo ,depth,user_no as userNo, u.name as wrtier,u.no as writerNo
-	from board b, user u 
-	where u.no = b.user_no 
-	order by g_no desc, o_no asc
-	limit #{currentPage},5
-	]]>
-	</select>
-	
-	
-	<select id="countAllboard" resultType="int">	
-	<![CDATA[
-		select count(*) as count from board
-	]]>
-	</select>
-	
-	<select id="findByNo" parameterType="long" resultType="boardvo">
-	<![CDATA[
-	select b.no as no, title, contents as content,hit,b.reg_date as regDate ,g_no as groupNo ,o_no as orderNo ,depth,user_no as userNo, u.name as wrtier,u.no as writerNo
-	from board b, user u 
-	where u.no = b.user_no 
-	and b.no = #{no}
-	order by g_no desc, o_no asc
-	]]>
-	</select>
-	
-	<select id="findByNoPassword" parameterType="map" resultType="boardvo">
-	<![CDATA[
-	select b.no as no, title, contents as content,hit,b.reg_date as regDate ,g_no as groupNo ,o_no as orderNo ,depth,user_no as userNo, u.name as wrtier,u.no as writerNo
-	from board b, user u 
-	where u.no = b.user_no 
-	and b.no = #{no}
-	and u.no = #{authNo}
-	order by g_no desc, o_no asc
-	]]>
-	</select>
-	
-	<update id="updateHit" parameterType="long">
-	<![CDATA[
-	update board set hit = hit+1 where no =#{no}
-	]]>
-	</update>
-	
-	
-	<update id="update" parameterType="boardvo" >
-	<![CDATA[
-	update board set title=#{title} , contents=#{content} where no=#{no}
-	]]>
-	</update>
-	
-	<update id="updateOrderNo">
-	<![CDATA[
-	update board set o_no=o_no+1 where g_no=#{groupNo} and o_no>=#{orderNo}
-	]]>
-	</update>
-	
 	<insert id="insert" parameterType="boardvo">
-	<![CDATA[
-	insert into board values(null,#{title},#{content},0, now(), #{groupNo},1,0,#{userNo})
-	]]>
+		<choose>
+			<when test="groupNo == null">
+				<![CDATA[
+				insert
+				  into board
+				values (null,
+						#{title },
+						#{contents },
+						0,
+						now(),
+						(select ifnull(max(g_no), 0) + 1 from board a ),
+						1, 
+						0, 
+						#{userNo })
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				insert
+				  into board
+				values (null,
+						#{title },
+						#{contents },
+						0,
+						now(),
+						#{groupNo },
+						#{orderNo }, 
+						#{depth }, 
+						#{userNo })				
+				]]>
+			</otherwise>
+		</choose>
 	</insert>
-	
-	<delete id="deleteByNo" parameterType="map">
-	delete from board where no=#{no}
-	<choose>
-		<when test='password == "" '>
-			 and user_no=#{userNo}
-		</when>
-		<otherwise>
-			and password=#{password}
-		</otherwise>
-	</choose>
 
+	<update id="update" parameterType="boardvo">
+		<![CDATA[
+		update board 
+		   set title=#{title },
+		       contents=#{contents }
+		 where no=#{no }
+		   and user_no=#{userNo }		
+		]]>	
+	</update>
+	
+	<delete id="delete" parameterType="map" > 
+		<![CDATA[
+		delete
+		  from board 
+		 where no = #{no }
+		   and user_no = #{userNo }
+		]]>	
 	</delete>
-	
-	
-	<insert id="reply" parameterType="boardvo">
-	<![CDATA[
-	insert into board values(null,#{title},#{content},0, now(), #{groupNo},#{orderNo},#{depth}, #{userNo})
-	]]>
-	</insert>
-		
 
+	<select id="findByNo" parameterType="long" resultType="boardvo">
+		<![CDATA[
+		select	no,
+				title,
+				contents,
+				g_no as groupNo,
+				o_no as orderNo,
+				depth,
+				user_no as userNo
+		   from board
+		  where no = #{no }		
+		]]>		
+	</select>
+	
+	<select id="findByNoAndUserNo" parameterType="map" resultType="boardvo">
+		<![CDATA[
+		select	no,
+				title,
+				contents
+		   from board
+		  where no = #{no }
+		    and user_no = #{userNo }		
+		]]>		
+	</select>	
+		
+	<select id="findAllByPageAndKeword" parameterType="map" resultType="boardvo">
+		<choose>
+			<when test="keyword == null or keyword == ''">
+				<![CDATA[
+				  select a.no,
+				  		 a.title,
+				  		 a.hit,
+				  		 date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate,
+				  		 a.depth,
+				  		 b.name as userName,
+				  		 a.user_no as userNo
+					from board a, user b
+				   where a.user_no = b.no
+				order by g_no desc, o_no asc
+				   limit #{startIndex }, #{size }				
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				  select a.no,
+				  		 a.title,
+				  		 a.hit,
+				  		 date_format(a.reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate,
+				  		 a.depth, 
+				  		 b.name as userName,
+				  		 a.user_no as userNo
+				  	from board a, user b
+				   where a.user_no = b.no
+				     and (title like '%${keyword }%' or contents like '%${keyword }%')
+				order by g_no desc, o_no asc
+				   limit #{startIndex }, #{size }				
+				]]>			
+			</otherwise>
+		</choose>
+	</select>
+
+	<update id="updateHit" parameterType="long">
+		<![CDATA[
+		update board
+		   set hit = hit + 1
+		 where no=#{no }
+		]]>	
+	</update>
+	
+	<update id="updateOrederNo" parameterType="map">
+		<![CDATA[
+		update board
+		   set o_no = o_no + 1
+		 where g_no = #{groupNo }
+		   and o_no >= #{orderNo }
+		]]>	
+	</update>	
+	
+	<select id="totalCount" parameterType="string" resultType="integer">
+		<choose>
+			<when test="_parameter == null or _parameter == ''">
+				<![CDATA[
+				select count(*) from board
+				]]>				
+			</when>
+			<otherwise>
+				<![CDATA[
+				select count(*) 
+				  from board
+				 where (title like '%${_parameter }%' or contents like '%${_parameter  }%') 
+				]]>				
+			</otherwise>
+		</choose>	
+	</select>
 </mapper>

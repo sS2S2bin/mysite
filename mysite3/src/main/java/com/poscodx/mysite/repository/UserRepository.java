@@ -20,8 +20,8 @@ public class UserRepository {
 		return sqlSession.insert("user.insert", vo);	
 	}
 
-	public UserVo findByNoAndPassword(String email, String password) {
-		return sqlSession.selectOne("user.findByNoAndPassword", Map.of("email", email, "password", password));
+	public UserVo findByEmailAndPassword(String email, String password) {
+		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
 	}
 
 	public UserVo findByNo(Long userNo) {
