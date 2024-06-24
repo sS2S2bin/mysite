@@ -12,48 +12,58 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-@EnableWebMvc // 중복되어도 되는 어노테이션 
+@EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer {
 	
+	// View Resolver
+	@Bean
+	public ViewResolver viewResolver() {
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setViewClass(JstlView.class);
+		viewResolver.setPrefix("/WEB-INF/views/");
+		viewResolver.setSuffix(".jsp");
+		viewResolver.setExposeContextBeansAsAttributes(true);
+		viewResolver.setExposedContextBeanNames("site");
+		
+		return viewResolver;
+	}
 	
-	// Message Convertor
+	// Message Converters
 	@Bean
 	public StringHttpMessageConverter stringHttpMessageConverter() {
 		StringHttpMessageConverter messageConverter = new StringHttpMessageConverter();
-		messageConverter.setSupportedMediaTypes(Arrays.asList(
-				new MediaType("text","html",Charset.forName("utf-8"))
-				));
+		messageConverter.setSupportedMediaTypes(
+			Arrays.asList(
+				new MediaType("text", "html", Charset.forName("utf-8"))
+			)
+		);
+		
 		return messageConverter;
 	}
 	
-	
 	@Bean
 	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
+			.indentOutput(true)
+			.dateFormat(new SimpleDateFormat("yyyy-mm-dd hh:MM:ss"));
 		
-		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-		builder.indentOutput(true);
-		builder.dateFormat(new SimpleDateFormat("yyyy-mm-dd hh:MM:ss"));
+		MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter(builder.build());
+		messageConverter.setSupportedMediaTypes(
+			Arrays.asList(
+				new MediaType("application", "json", Charset.forName("utf-8"))
+			)
+		);
 		
-		  MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-	        messageConverter.setSupportedMediaTypes( 
-	               Arrays.asList(new MediaType("application", "json", Charset.forName("utf-8")))
-	              );
-	        return messageConverter;
-
+		return messageConverter;
 	}
-
-
-	// Default Servlet Handler
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		 configurer.enable();
-	}
-
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -61,6 +71,9 @@ public class MvcConfig implements WebMvcConfigurer {
 		converters.add(mappingJackson2HttpMessageConverter());
 	}
 	
-	
-
+	// Default Servlet Handler
+	@Override
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+		configurer.enable();
+	}
 }
