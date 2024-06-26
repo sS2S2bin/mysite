@@ -1,25 +1,25 @@
 package com.poscodx.mysite.dto;
 
 public class JsonResult {
-	private String result; // success or fail
-	private String message;  // fail?set
-	private Object data; // success?set
+	private String result;   // "success" or "fail"
+	private String message;  // if fail, set 
+	private Object data;     // if success, set
 	
 	private JsonResult(Object data) {
-		this.data = data;
 		result = "success";
+		this.data = data;
 	}
 	
 	private JsonResult(String message) {
-		this.message = message;
 		result = "fail";
+		this.message = message;
+	}	
+	
+	public static JsonResult success(Object data) {
+		return new JsonResult(data);
 	}
 	
-	public static JsonResult success (Object data){
-		return new JsonResult(data);
-			
-		}
-	public static JsonResult fail (String message){
+	public static JsonResult fail(String message) {
 		return new JsonResult(message);
 	}
 
@@ -34,6 +34,4 @@ public class JsonResult {
 	public Object getData() {
 		return data;
 	}
-	
-	
 }

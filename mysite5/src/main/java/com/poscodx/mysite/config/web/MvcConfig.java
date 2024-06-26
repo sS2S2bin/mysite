@@ -71,18 +71,18 @@ public class MvcConfig implements WebMvcConfigurer {
 		converters.add(stringHttpMessageConverter());
 		converters.add(mappingJackson2HttpMessageConverter());
 	}
+
+	// static(assets) url mapping
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+			.addResourceHandler("/assets/**")
+			.addResourceLocations("classpath:assets/");
+	}
 	
 	// Default Servlet Handler
-//	@Override
-//	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-//		configurer.enable();
-//	}
-	
-	// static(statics) url mapping
-		@Override
-		public void addResourceHandlers(ResourceHandlerRegistry registry) {
-			registry
-				.addResourceHandler("/statics/**")
-				.addResourceLocations("classpath:statics/");
-		}
+	// @Override
+	// public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+	//	configurer.enable();
+	// }
 }

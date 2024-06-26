@@ -12,33 +12,36 @@ import com.poscodx.mysite.vo.GuestbookVo;
 
 @Service
 public class GuestbookService {
+	
 	@Autowired
 	private GuestbookRepository guestbookRepository;
 	
 	@Autowired
 	private GuestbookLogRepository guestbookLogRepository;
 	
-	
-	public List<GuestbookVo> getContentsList(){
+	public List<GuestbookVo> getContentsList() {
 		return guestbookRepository.findAll();
 	}
 	
 	@Transactional
 	public void deleteContents(Long no, String password) {
-		
-		//status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-		
-		guestbookLogRepository.update(no);
-
-		guestbookRepository.deleteByNoAndPassword(no, password);
-	}
-	
-	public void addContents(GuestbookVo vo) {
-		int count = guestbookLogRepository.update();
-		if(count==0) {
-			guestbookLogRepository.insert();
+		GuestbookVo vo = guestbookRepository.findByNo(no);
+		if(vo == null) {
+			return;
 		}
 		
+		int count = guestbookRepository.deleteByNoAndPassword(no, password);
+		if(count == 1) {
+			guestbookLogRepository.update(vo.getRegDate());
+		}
+	}
+	
+	@Transactional
+	public void addContents(GuestbookVo vo) {
+		int count = guestbookLogRepository.update();		
+		if(count == 0) {
+			guestbookLogRepository.insert();
+		}
 		guestbookRepository.insert(vo);
 	}
 }

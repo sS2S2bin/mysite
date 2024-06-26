@@ -12,18 +12,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @PropertySource("classpath:com/poscodx/mysite/config/web/fileupload.properties")
-public class FileUploadConfig implements WebMvcConfigurer{
+public class FileUploadConfig implements WebMvcConfigurer {
 	@Autowired
 	private Environment env;
 	
 	// Multipart Resolver
 	@Bean
 	public MultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver =  new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(env.getProperty("fileupload.maxUploadSize",Long.class));
-		multipartResolver.setMaxInMemorySize(env.getProperty("fileupload.maxInMemorySize",Integer.class));
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(env.getProperty("fileupload.maxUploadSize", Long.class));
+		multipartResolver.setMaxInMemorySize(env.getProperty("fileupload.maxInMemorySize", Integer.class));
 		multipartResolver.setDefaultEncoding(env.getProperty("fileupload.defaultEncoding"));
-		
 		
 		return multipartResolver;
 	}
@@ -31,9 +30,9 @@ public class FileUploadConfig implements WebMvcConfigurer{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry
-			.addResourceHandler(env.getProperty("fileupload.resourceUrl")+"/**") //url
-			.addResourceLocations("file:"+env.getProperty("fileupload.fileuploadUrl")+"/"); //fileupload
+			.addResourceHandler(env.getProperty("fileupload.resourceUrl") + "/**")
+			.addResourceLocations("file:" + env.getProperty("fileupload.uploadLocation") + "/");
 	}
 	
-
+	
 }

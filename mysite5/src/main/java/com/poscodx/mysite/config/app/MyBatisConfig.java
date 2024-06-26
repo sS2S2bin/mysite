@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class MyBatisConfig {
 	
 	@Bean
-	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, ApplicationContext applicationContext) throws Exception{
+	public SqlSessionFactory sqlSessionFactory(DataSource dataSource, ApplicationContext applicationContext) throws Exception {
 		SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 		sqlSessionFactory.setDataSource(dataSource);
 		sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:com/poscodx/mysite/config/app/mybatis/configuration.xml"));
@@ -24,7 +24,6 @@ public class MyBatisConfig {
 	
 	@Bean
 	public SqlSession sqlSession(SqlSessionFactory sqlSessionFactory) {
-		// contructor-arg index=0
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 }

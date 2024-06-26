@@ -1,13 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%> 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="${pageContext.request.contextPath }/statics/css/board.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath }/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
@@ -33,7 +34,7 @@
 							<c:choose>
 								<c:when test="${vo.depth > 0 }">
 									<td class="left" style="text-align:left; padding-left:${20*vo.depth }px">
-										<img src="${pageContext.request.contextPath }/statics/images/reply.png">
+										<img src="${pageContext.request.contextPath }/assets/images/reply.png">
 										<a href="${pageContext.request.contextPath }/board/view/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }">${vo.title }</a>
 									</td>
 								</c:when>
@@ -47,14 +48,12 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<td>
-								<c:choose>
-									<c:when test="${not empty authUser && authUser.no == vo.userNo }">
-										<a href="${pageContext.request.contextPath }/board/delete/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }" class="del" style="background-image:url(${pageContext.request.contextPath }/statics/images/recycle.png)">삭제</a>
-									</c:when>
-									<c:otherwise>
-										&nbsp;
-									</c:otherwise>
-								</c:choose>
+								<sec:authorize access="isAuthenticated()">
+									<sec:authentication property="principal" var="authUser"/>
+									<c:if test="${authUser.no == vo.userNo }">
+										<a href="${pageContext.request.contextPath }/board/delete/${vo.no }?p=${map.currentPage }&kwd=${map.keyword }" class="del" style="background-image:url(${pageContext.request.contextPath }/assets/images/recycle.png)">삭제</a>
+									</c:if>
+								</sec:authorize>
 							</td>
 						</tr>
 					</c:forEach>
@@ -84,9 +83,9 @@
 					</ul>
 				</div>				
 				<div class="bottom">
-					<c:if test="${not empty authUser }">
+					<sec:authorize access="isAuthenticated()">
 						<a href="${pageContext.request.contextPath }/board/write?p=${map.currentPage }&kwd=${map.keyword }" id="new-book">글쓰기</a>
-					</c:if>
+					</sec:authorize>
 				</div>
 			</div>
 		</div>

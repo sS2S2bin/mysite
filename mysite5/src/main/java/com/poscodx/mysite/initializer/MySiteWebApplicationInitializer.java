@@ -21,7 +21,12 @@ public class MySiteWebApplicationInitializer extends AbstractAnnotationConfigDis
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] {WebConfig.class};
+		return new Class<?>[]{WebConfig.class};
+	}
+	
+	@Override
+	protected Filter[] getServletFilters() {
+		return new Filter[] {new CharacterEncodingFilter("UTF-8"), new DelegatingFilterProxy("springSecurityFilterChain")};
 	}
 
 	@Override
@@ -30,18 +35,9 @@ public class MySiteWebApplicationInitializer extends AbstractAnnotationConfigDis
 	}
 
 	@Override
-	protected Filter[] getServletFilters() {
-		return new Filter[] {new CharacterEncodingFilter("UTF-8"), new DelegatingFilterProxy("springSecurityFilterChain")};
-	}
-
-	@Override
 	protected FrameworkServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
 		DispatcherServlet servlet = (DispatcherServlet)super.createDispatcherServlet(servletAppContext);
 		servlet.setThrowExceptionIfNoHandlerFound(true);
-		
 		return servlet;
 	}
-	
-	
-
 }

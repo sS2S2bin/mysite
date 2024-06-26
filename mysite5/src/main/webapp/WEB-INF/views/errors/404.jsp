@@ -7,7 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>404 Error Page</h1>
-<p>왜 일로 들어오십니까.. 아니라니까..</p>
+	<h1>404 Not Found</h1>
+	<p>
+		요청을 찾을 수 없습니다.
+	</p>
 </body>
 </html>

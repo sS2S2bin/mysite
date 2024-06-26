@@ -15,18 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @PropertySource("classpath:com/poscodx/mysite/config/web/fileupload.properties")
 public class FileUploadService {
-	
 	@Autowired
 	private Environment env;
-	
-//	private static String SAVE_PATH = "/Users/soobin/Desktop/poscodx2024/eclipse-workspace/mysite-uploads";
-//	private static String URL_PATH = "/statics/upload-images";
 	
 	public String restore(MultipartFile file) {
 		String url = null;
 		
 		try {
-			File uploadDirectory = new File(env.getProperty("fileupload.fileuploadUrl"));
+			File uploadDirectory = new File(env.getProperty("fileupload.uploadLocation"));
 			if(!uploadDirectory.exists()) {
 				uploadDirectory.mkdirs();
 			}
@@ -45,12 +41,11 @@ public class FileUploadService {
 			System.out.println("#######" + fileSize);
 			
 			byte[] data = file.getBytes();
-			OutputStream os = new FileOutputStream(env.getProperty("fileupload.fileuploadUrl") + "/" + saveFilename);
+			OutputStream os = new FileOutputStream(env.getProperty("fileupload.uploadLocation") + "/" + saveFilename);
 			os.write(data);
 			os.close();
 			
 			url = env.getProperty("fileupload.resourceUrl") + "/" + saveFilename;
-			
 		} catch(IOException ex) {
 			throw new RuntimeException(ex);
 		}
@@ -73,5 +68,4 @@ public class FileUploadService {
 		
 		return filename;
 	}
-
 }

@@ -14,6 +14,7 @@ import org.springframework.transaction.TransactionManager;
 @Configuration
 @PropertySource("classpath:com/poscodx/mysite/config/app/jdbc.properties")
 public class DBConfig {
+	
 	@Autowired
 	private Environment env;
 	
@@ -24,12 +25,11 @@ public class DBConfig {
 		dataSource.setUrl(env.getProperty("jdbc.url"));
 		dataSource.setUsername(env.getProperty("jdbc.username"));
 		dataSource.setPassword(env.getProperty("jdbc.password"));
+		dataSource.setInitialSize(env.getProperty("jdbc.initialSize", Integer.class));
+		dataSource.setMaxActive(env.getProperty("jdbc.maxActive", Integer.class));
 		
-		dataSource.setInitialSize(env.getProperty("jdbc.initialSize",Integer.class));
-		dataSource.setMaxActive(env.getProperty("jdbc.maxActive", Integer.class)); //51부터는 기다려
 		return dataSource;
 	}
-	
 	
 	@Bean
 	public TransactionManager transactionManager(DataSource dataSource) {

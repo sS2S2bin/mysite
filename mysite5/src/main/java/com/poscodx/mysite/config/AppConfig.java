@@ -13,8 +13,7 @@ import com.poscodx.mysite.config.app.SecurityConfig;
 @Configuration
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
-@ComponentScan({"com.poscodx.mysite.aspect", "com.poscodx.mysite.repository", "com.poscodx.mysite.service"})
+@ComponentScan({"com.poscodx.mysite.service", "com.poscodx.mysite.repository", "com.poscodx.mysite.aspect"})
 @Import({DBConfig.class, MyBatisConfig.class, SecurityConfig.class})
 public class AppConfig {
-
 }
