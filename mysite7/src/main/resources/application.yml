@@ -48,7 +48,16 @@ spring:
       hikari:
          minimum-idle: 10
          maximum-pool-size: 20  
-
+   # thymeleaf
+   thymeleaf:
+      check-template-location: true
+      mode: HTML
+      prefix: classpath:templates/
+      suffix: .html
+      encoding: UTF-8
+      cache: false
+      
+      
 # mybatis
 mybatis:
    config-location: classpath:mybatis/configuration.xml
@@ -57,7 +66,7 @@ mybatis:
 server:
    port: 8088
    servlet:
-      context-path: /mysite6
+      context-path: /mysite7
       encoding:
          charset: utf-8
          enabled: true
