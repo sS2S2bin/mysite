@@ -10,7 +10,7 @@
 	<div id="container">
 		<div id="wrapper">
 			<div id="content">
-
+				<div th:insert="~{/include/header.html :: headerFragment}"></div>
 				<div id="site-introduction">
 					<img id="profile" th:src="@{(${servletContext.getAttribute('sitevo').profile})}" style="width:420px">
 					<h2 th:text="${servletContext.getAttribute('sitevo').welcome}"></h2>

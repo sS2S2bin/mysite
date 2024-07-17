@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>mysite</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+<link th:href="@{/assets/css/admin/main.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div id="container">
+		<div th:insert="~{/include/header.html :: headerFragment}"></div>
+		<div id="wrapper">
+			<div id="content">
+				<div id="site-form">
+					<form th:action="@{/admin/main/update}" enctype="multipart/form-data" method="post">
+						<input type="hidden" name="profile" value="${sitevo.profile }" />
+
+						<label class="block-label" for="title">사이트 타이틀</label>
+						<input id="title" name="title" type="text" value="${sitevo.title }">
+						
+						<label class="block-label" for="welcome">환영 메세지</label>
+						<input id="welcome" name="welcome" type="text" value="${sitevo.welcome }">
+
+						<label class="block-label">프로필 이미지</label>
+						<img id="profile" src="${pageContext.request.contextPath }${sitevo.profile }">
+						<input type="file" name="file">
+
+						<label class="block-label">사이트 설명</label>
+						<textarea name="description">${sitevo.description }</textarea>
+						
+						<input type="submit" value="변경" />
+					</form>									
+				</div>
+			</div>
+			<!-- <c:import url="/WEB-INF/views/admin/include/navigation.jsp">
+				<c:param name="menu" value="main"/>
+			</c:import> -->
+		</div>
+	</div>
+</body>
+</html>

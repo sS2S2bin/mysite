@@ -48,6 +48,8 @@ spring:
       hikari:
          minimum-idle: 10
          maximum-pool-size: 20  
+         
+         
    # thymeleaf
    thymeleaf:
       check-template-location: true
