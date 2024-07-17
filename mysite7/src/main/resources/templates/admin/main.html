@@ -1,40 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>mysite</title>
+<title th:text="${@site.title}"></title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
 <link th:href="@{/assets/css/admin/main.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
-		<div th:insert="~{/include/header.html :: headerFragment}"></div>
+		<th:block th:include="admin/includes/header"></th:block>
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-form">
-					<form th:action="@{/admin/main/update}" enctype="multipart/form-data" method="post">
-						<input type="hidden" name="profile" value="${sitevo.profile }" />
-
-						<label class="block-label" for="title">사이트 타이틀</label>
-						<input id="title" name="title" type="text" value="${sitevo.title }">
+					<form method="post" th:object="${siteVo}" th:action="@{/admin/main/update}" enctype="multipart/form-data">
+						<input type="hidden" th:field="*{profile}" />
 						
-						<label class="block-label" for="welcome">환영 메세지</label>
-						<input id="welcome" name="welcome" type="text" value="${sitevo.welcome }">
+						<label class="block-label" for="title">사이트 타이틀</label>
+						<input type="text" id="title" th:field="*{title}">
+						
+						<label class="block-label" for="welcomeMessage">환영 메세지</label>
+						<input type="text" id="welcomeMessage" th:field="*{welcome}">
 
 						<label class="block-label">프로필 이미지</label>
-						<img id="profile" src="${pageContext.request.contextPath }${sitevo.profile }">
+						<img style="width:120px" id="profile" th:src="@{(*{profile})}">
 						<input type="file" name="file">
 
 						<label class="block-label">사이트 설명</label>
-						<textarea name="description">${sitevo.description }</textarea>
+						<textarea name="description" th:text="*{description}"></textarea>
 						
 						<input type="submit" value="변경" />
-					</form>									
+					</form>
 				</div>
 			</div>
-			<!-- <c:import url="/WEB-INF/views/admin/include/navigation.jsp">
-				<c:param name="menu" value="main"/>
-			</c:import> -->
+			<th:block th:include="admin/includes/navigation"></th:block>
 		</div>
 	</div>
 </body>

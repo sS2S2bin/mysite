@@ -17,14 +17,20 @@ spring:
    mvc:
       static-path-pattern: /assets/**
       throw-exception-if-no-handler-found: true
-      # view:
-      #   prefix: /WEB-INF/views/
-      #   suffix: .jsp
 
+   #thymeleaf
+   thymeleaf:
+      check-template-location: true
+      mode: HTML	
+      prefix: classpath:templates/
+      suffix: .html
+      encoding: UTF-8
+      cache: false
+      
    # web
    web:
       resources:
-         static-locations: file:/Users/soobin/Desktop/poscodx2024/eclipse-workspace/mysite/mysite-uploads/, classpath:assets/
+         static-locations: file:/mysite-uploads/, classpath:assets/
    
    # message resources(i18n)
    messages:
@@ -42,31 +48,20 @@ spring:
    # datasource
    datasource:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://192.168.64.3:3306/webdb?charset=utf8
+      url: jdbc:mariadb://192.168.0.203:3306/webdb?charset=utf8
       username: webdb
       password: webdb
       hikari:
          minimum-idle: 10
          maximum-pool-size: 20  
-         
-         
-   # thymeleaf
-   thymeleaf:
-      check-template-location: true
-      mode: HTML
-      prefix: classpath:templates/
-      suffix: .html
-      encoding: UTF-8
-      cache: false
-      
-      
+
 # mybatis
 mybatis:
    config-location: classpath:mybatis/configuration.xml
    
 # server configuration
 server:
-   port: 8088
+   port: 8081
    servlet:
       context-path: /mysite7
       encoding:
@@ -74,10 +69,8 @@ server:
          enabled: true
    error:
       whitelabel:
-         enabled: false 
+         enabled: false
       path: /error
-
-
 
 # logging
 logging:

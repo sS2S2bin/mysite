@@ -18,7 +18,7 @@
 		       welcome = #{welcome },
 			   profile = #{profile },
 			   description = #{description }
-	     where no = 19    	
+	     where no = 1       	
 		]]>
 	</update>
 </mapper>

@@ -12,6 +12,7 @@ import com.poscodx.mysite.vo.UserVo;
 
 @Controller
 public class MainController {
+	
 	@Autowired
 	private ServletContext servletContext;
 	

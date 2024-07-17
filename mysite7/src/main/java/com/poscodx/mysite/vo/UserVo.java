@@ -20,7 +20,7 @@ public class UserVo {
 	@Length(min=4, max=16)
 	private String password;
 	
-	private String gender;
+	private String gender = "female";
 	private String joinDate;
 	private String role;
 	

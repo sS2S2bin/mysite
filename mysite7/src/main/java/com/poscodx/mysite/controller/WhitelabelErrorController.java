@@ -11,37 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/error")
 public class WhitelabelErrorController implements ErrorController {
-	
-	// container 안에서 터지는
 	@RequestMapping("/404")
 	public String _404() {
-		return "views/errors/404";
+		return "errors/404";
 	}
 	@RequestMapping("/500")
 	public String _500() {
-		return "views/errors/500";
+		return "errors/500";
 	}
-
 	
-	// container 밖에서 
 	@RequestMapping("")
 	public String handleError(HttpServletRequest request) {
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		if(status != null) {
 			int statusCode = Integer.valueOf(status.toString());
-
+			
 			if(statusCode == HttpStatus.NOT_FOUND.value()) {
-				return "views/errors/404";
+				return "errors/404";
 			} else if(statusCode == HttpStatus.BAD_REQUEST.value()) {
-				return "views/errors/400";
+				return "errors/400";
 			} else if(statusCode == HttpStatus.FORBIDDEN.value()) {
-				return "views/errors/403";
+				return "errors/403";
 			} else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-				return "views/errors/500";
+				return "errors/500";
 			}
 		}
 
 		return "errors/unknown";
 	}
-
+	
 }
